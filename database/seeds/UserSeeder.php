@@ -13,8 +13,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 15)->create()->each(function ($user) {
-            $user->roles()->attach(Role::where('id', mt_rand(1, 3))->first());
-        });
+        factory(User::class, 15)->create();
     }
 }
