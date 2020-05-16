@@ -14,19 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('/login', 'Auth\ApiAuthController@login');
 Route::post('/register', 'Auth\ApiAuthController@register');
 
 Route::middleware(['auth:sanctum'])->group(function () {
+
+    //user
     Route::post('/logout', 'Auth\ApiAuthController@logout');
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-});
 
-//flat
-Route::post('/flat', 'FlatController@store');
+    //flat
+    Route::post('/flats', 'FlatController@store');
+    Route::get('/flats/{flat}', 'FlatController@show');
+    Route::patch('/flats/{flat}', 'FlatController@update');
+    Route::delete('/flats/{flat}', 'FlatController@destroy');
+
+});
