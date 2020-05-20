@@ -33,9 +33,26 @@ class FlatTest extends TestCase
         $response = $this->post('api/flats', $this->data(), $this->headers());
 
         $flat = Flat::first();
+        $this->user = $this->user->fresh();
 
         $this->assertEquals('Test Flat', $flat->name);
+        $this->assertEquals($this->user->flat->id, $flat->id);
         $response->assertStatus(Response::HTTP_CREATED);
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_not_replace_flat()
+    {
+        $this->post('api/flats', $this->data(), $this->headers());
+        $this->user = $this->user->fresh();
+
+        $flat = Flat::first();
+
+        $response = $this->post('api/flats', $this->data(), $this->headers());
+        $this->user = $this->user->fresh();
+
+        $this->assertEquals($this->user->flat->id, $flat->id);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
     /** @test */
@@ -83,13 +100,26 @@ class FlatTest extends TestCase
     /** @test */
     public function a_flat_can_be_deleted()
     {
-        $this->withoutExceptionHandling();
         $flat = factory(Flat::class)->create();
 
         $response = $this->delete('api/flats/' . $flat->id, $this->data(), $this->headers());
         $this->assertCount(0, Flat::all());
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
+
+//    /** @test */
+//    public function only_the_users_flat_can_be_retrieved()
+//    {
+//        $this->withoutExceptionHandling();
+//        $flat = factory(Flat::class)->create();
+//
+//        $anotherUser = factory(User::class)->create();
+//        $token = $anotherUser->createToken('lokator-api-token')->plainTextToken;
+//
+//        $response = $this->get('/api/contacts/' . $flat->id, ['Authorization' => 'Bearer ' . $token]);
+//        $response->assertStatus(403);
+//    }
+
 
     private function data() {
         return [

@@ -27,7 +27,16 @@ class FlatController extends Controller
      */
     public function store(Request $request)
     {
+        $user = $request->user();
+
+        if ($user->flat()->count() > 0) {
+            return response('This user has assigned flat', Response::HTTP_FORBIDDEN);
+        }
+
         $flat = Flat::create($this->validateData($request));
+
+        $user->flat_id = $flat->id;
+        $user->save();
 
         return response($flat, Response::HTTP_CREATED);
     }
