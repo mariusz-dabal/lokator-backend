@@ -57,12 +57,15 @@ class FlatController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Flat  $flat
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Flat $flat
      * @return FlatResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Request $request, Flat $flat)
     {
+        $this->authorize('update', $flat);
+
         $flat->update($this->validateData($request));
 
         return new FlatResource($flat);
