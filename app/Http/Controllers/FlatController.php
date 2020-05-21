@@ -44,11 +44,13 @@ class FlatController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Flat  $flat
+     * @param \App\Flat $flat
      * @return FlatResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Flat $flat)
     {
+        $this->authorize('view', $flat);
         return new FlatResource($flat);
     }
 

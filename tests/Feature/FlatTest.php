@@ -107,18 +107,17 @@ class FlatTest extends TestCase
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
-//    /** @test */
-//    public function only_the_users_flat_can_be_retrieved()
-//    {
-//        $this->withoutExceptionHandling();
-//        $flat = factory(Flat::class)->create();
-//
-//        $anotherUser = factory(User::class)->create();
-//        $token = $anotherUser->createToken('lokator-api-token')->plainTextToken;
-//
-//        $response = $this->get('/api/contacts/' . $flat->id, ['Authorization' => 'Bearer ' . $token]);
-//        $response->assertStatus(403);
-//    }
+    /** @test */
+    public function only_the_users_flat_can_be_retrieved()
+    {
+        $flat = factory(Flat::class)->create();
+
+        $anotherUser = factory(User::class)->create();
+        $token = $anotherUser->createToken('lokator-api-token')->plainTextToken;
+
+        $response = $this->get('/api/flats/' . $flat->id, ['Authorization' => 'Bearer ' . $token]);
+        $response->assertStatus(403);
+    }
 
 
     private function data() {
