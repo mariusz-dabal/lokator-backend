@@ -26,9 +26,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     //flat
-    Route::post('/flats', 'FlatController@store');
-    Route::get('/flats/{flat}', 'FlatController@show');
-    Route::patch('/flats/{flat}', 'FlatController@update');
-    Route::delete('/flats/{flat}', 'FlatController@destroy');
+    Route::prefix('flats')->group(function () {
+        Route::post('/', 'FlatController@store');
+        Route::get('/{flat}', 'FlatController@show');
+        Route::patch('/{flat}', 'FlatController@update');
+        Route::delete('/{flat}', 'FlatController@destroy');
+    });
 
 });

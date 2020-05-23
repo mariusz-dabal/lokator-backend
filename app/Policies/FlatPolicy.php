@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Flat;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class FlatPolicy
 {
@@ -30,7 +31,9 @@ class FlatPolicy
      */
     public function view(User $user, Flat $flat)
     {
-        return $flat->id === $user->flat_id;
+        return $flat->id === $user->flat_id
+            ? Response::allow()
+            : Response::deny('You do not have permission to view this flat');
     }
 
     /**

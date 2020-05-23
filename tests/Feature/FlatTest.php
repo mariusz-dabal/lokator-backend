@@ -70,11 +70,11 @@ class FlatTest extends TestCase
     /** @test */
     public function a_flat_can_be_retrieved()
     {
-        $flat = factory(Flat::class)->create();
-        $flat->users()->save($this->user);
+        $this->post('api/flats', $this->data(), $this->headers());
 
-        $this->user->fresh();
-        $flat = $flat->fresh();
+        $flat = Flat::first();
+
+        $this->user = $this->user->fresh();
 
         $response = $this->get('api/flats/' . $flat->id, $this->headers());
 
@@ -83,14 +83,19 @@ class FlatTest extends TestCase
                 'name' => $flat->name,
             ]
         ]);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /** @test */
     public function a_flat_can_be_patched()
     {
-        $flat = factory(Flat::class)->create();
+        $this->post('api/flats', $this->data(), $this->headers());
 
-        $response = $this->patch('api/flats/' . $flat->id, $this->data(), $this->headers());
+        $flat = Flat::first();
+
+        $this->user = $this->user->fresh();
+
+        $response = $this->patch('api/flats/' . $flat->id, ['name' => 'Patched name'], $this->headers());
 
         $flat = $flat->fresh();
 
@@ -99,6 +104,7 @@ class FlatTest extends TestCase
                 'name' => $flat->name,
             ]
         ]);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /** @test */
@@ -134,6 +140,24 @@ class FlatTest extends TestCase
         $response = $this->patch('/api/flats/' . $flat->id, $this->data(), ['Authorization' => 'Bearer ' . $token]);
         $response->assertStatus(403);
     }
+
+//    /** @test */
+//    public function a_user_can_be_added_to_flat()
+//    {
+//        $flat = factory(Flat::class)->create();
+//
+//        $anotherUser = factory(User::class)->create();
+//
+//        $response = $this->post('api/flats/' . $flat->id . '/user' . $anotherUser->id, $this->headers());
+//
+//        $flat = $flat->fresh();
+//
+//        dd($flat->users);
+//
+//        $response->assertStatus(Response::HTTP_OK);
+//
+////        $this->assertContains();
+//    }
 
 
     private function data() {
