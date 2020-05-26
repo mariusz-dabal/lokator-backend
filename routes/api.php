@@ -21,8 +21,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     //user
     Route::post('/logout', 'Auth\ApiAuthController@logout');
-    Route::get('/user', function (Request $request) {
-        return $request->user();
+    Route::prefix('user')->group(function () {
+        Route::get('/', 'UserController@get');
     });
 
     //flat
@@ -34,3 +34,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
 });
+
+Route::post('/avatars', 'AvatarController@store');
