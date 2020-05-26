@@ -23,6 +23,24 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    public function a_list_of_users_can_be_fetched()
+    {
+        $this->withoutExceptionHandling();
+
+        $response = $this->get('/api/users', $this->headers());
+
+        $response->assertJsonCount(1)
+            ->assertJson([
+                'data' => [
+                    [
+                        'id' => $this->user->id
+                    ]
+                ]
+            ]);
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    /** @test */
     public function an_authenticated_user_can_be_retrieved()
     {
         $response = $this->get('api/user', $this->headers());

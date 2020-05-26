@@ -25,6 +25,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', 'UserController@get');
     });
 
+    //users
+    Route::get('/users', 'UserController@index');
+
     //flat
     Route::prefix('flats')->group(function () {
         Route::post('/', 'FlatController@store');
@@ -35,4 +38,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 });
 
+Route::get('/avatars', 'AvatarController@index');
+Route::get('/avatars/{avatar}', 'AvatarController@show');
+Route::post('/avatars/{avatar}', 'AvatarController@update');
 Route::post('/avatars', 'AvatarController@store');
+Route::delete('/avatars/{avatar}', 'AvatarController@destroy');

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\User as UserResource;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -20,11 +22,13 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse|object
      */
     public function index()
     {
-        //
+        return UserResource::collection(User::all())
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
