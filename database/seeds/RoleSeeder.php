@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Role;
-class RolesTableSeeder extends Seeder
+use Illuminate\Database\Seeder;
+
+class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.

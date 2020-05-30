@@ -94,6 +94,11 @@ class User extends Authenticatable
         return $this->belongsTo('App\Avatar');
     }
 
+    public function color()
+    {
+        return $this->belongsTo('App\Color');
+    }
+
     public function flat()
     {
         return $this->belongsTo('App\Flat');

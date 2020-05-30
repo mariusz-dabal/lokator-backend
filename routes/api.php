@@ -24,6 +24,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     //roles
     Route::post('/admin/users/{user}/roles', 'UserController@assignRole');
+    Route::post('/admin/users/{user}/roles', 'UserController@detachRole');
 
     //users
     Route::get('/user', 'UserController@get');
@@ -39,6 +40,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/{avatar}', 'AvatarController@update');
         Route::post('/', 'AvatarController@store');
         Route::delete('/{avatar}', 'AvatarController@destroy');
+    });
+
+    //colors
+    Route::prefix('colors')->group(function () {
+        Route::get('/', 'ColorController@index');
+        Route::get('/{color}', 'ColorController@show');
+        Route::patch('/{color}', 'ColorController@update');
+        Route::post('/', 'ColorController@store');
+        Route::delete('/{color}', 'ColorController@destroy');
     });
 
     //flats

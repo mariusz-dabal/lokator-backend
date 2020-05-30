@@ -25,7 +25,7 @@ class AvatarPolicy
      */
     public function viewAny(User $user)
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +37,7 @@ class AvatarPolicy
      */
     public function view(User $user, Avatar $avatar)
     {
-        return false;
+        return true;
     }
 
     /**
