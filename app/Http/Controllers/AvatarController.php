@@ -28,6 +28,8 @@ class AvatarController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Avatar::class);
+
         $this->validateData();
 
         $path = $request->file('avatar')->store('avatars');
@@ -63,6 +65,8 @@ class AvatarController extends Controller
      */
     public function update(Avatar $avatar, Request $request)
     {
+        $this->authorize('update', $avatar);
+
         $this->validateData();
 
         Storage::disk('avatars')->delete(trim($avatar->path, 'avatars/'));
@@ -86,11 +90,12 @@ class AvatarController extends Controller
      */
     public function destroy(Avatar $avatar)
     {
-        Storage::disk('avatars')->delete(trim($avatar->path, 'avatars/'));
+        $this->authorize('delete', $avatar);
+
         $avatar->delete();
 
         return response()
-            ->json('An avatar has been deleted')
+            ->json('Avatar has been deleted')
             ->setStatusCode(Response::HTTP_OK);
     }
 

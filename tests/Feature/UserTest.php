@@ -57,18 +57,29 @@ class UserTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
     }
 
-//
+
+    /** @test */
+    public function an_user_can_be_patched()
+    {
+        $response = $this->patch('api/users/' . $this->user->id, $this->data(), $this->headers());
+
+        $this->user = $this->user->fresh();
+
+        $this->assertEquals('Test User', $this->user->name);
+//        $this->assertEquals(1, $this->user->avatar_id);
+//        $this->assertEquals(1, $this->user->color_id);
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
 //    /** @test */
-//    public function an_user_can_be_edited()
+//    public function an_user_can_be_deleted()
 //    {
-//        $this->withoutExceptionHandling();
-//
-//        $response = $this->patch('/user/' . $this->user->id, $this->data(), $this->headers());
-//
-//        $this->user = $this->user->fresh();
-//
-//        $this->assertEquals('Test User', $this->user->name);
-//        $response->assertStatus(Response::HTTP_OK);
+////        $this->withoutExceptionHandling();
+//        $response = $this->delete('api/users/' . $this->user->id, $this->headers());
+//        dd($response);
+////        dd(User::all());
+//        $this->assertCount(0, User::all());
+//        $response->assertStatus(Response::HTTP_NO_CONTENT);
 //    }
 
 //    /** @test */
@@ -79,6 +90,8 @@ class UserTest extends TestCase
 
     private function data() {
         return [
+//            'avatar_id' => 1,
+//            'color_id' => 1,
             'name' => 'Test User',
         ];
     }

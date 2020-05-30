@@ -2,14 +2,20 @@
 
 namespace App\Policies;
 
-use App\Flat;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class FlatPolicy
+class UserPolicy
 {
     use HandlesAuthorization;
+
+    public function before($user, $ability)
+    {
+        if ($user->hasAnyRole('Admin')) {
+            return true;
+        }
+    }
 
     /**
      * Determine whether the user can view any models.
@@ -19,21 +25,21 @@ class FlatPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return false;
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Flat  $flat
+     * @param  \App\User  $model
      * @return mixed
      */
-    public function view(User $user, Flat $flat)
+    public function view(User $user, User $model)
     {
-        return $flat->id === $user->flat_id
+        return $user->id === $model->id
             ? Response::allow()
-            : Response::deny('You do not have permission to view this flat');
+            : Response::deny('You do not have permission to view this user');
     }
 
     /**
@@ -44,43 +50,45 @@ class FlatPolicy
      */
     public function create(User $user)
     {
-        //
+        return false;
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Flat  $flat
+     * @param  \App\User  $model
      * @return mixed
      */
-    public function update(User $user, Flat $flat)
+    public function update(User $user, User $model)
     {
-        return $flat->id === $user->flat_id
+        return $user->id === $model->id
             ? Response::allow()
-            : Response::deny('You do not have permission to edit this flat');
+            : Response::deny('You do not have permission to edit this user');
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Flat  $flat
+     * @param  \App\User  $model
      * @return mixed
      */
-    public function delete(User $user, Flat $flat)
+    public function delete(User $user, User $model)
     {
-        //
+        return $user->id === $model->id
+            ? Response::allow()
+            : Response::deny('You do not have permission to delete this user');
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Flat  $flat
+     * @param  \App\User  $model
      * @return mixed
      */
-    public function restore(User $user, Flat $flat)
+    public function restore(User $user, User $model)
     {
         //
     }
@@ -89,10 +97,10 @@ class FlatPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Flat  $flat
+     * @param  \App\User  $model
      * @return mixed
      */
-    public function forceDelete(User $user, Flat $flat)
+    public function forceDelete(User $user, User $model)
     {
         //
     }

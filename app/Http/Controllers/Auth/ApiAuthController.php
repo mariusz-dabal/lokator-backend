@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\User as UserResource;
 
 class ApiAuthController extends Controller
 {
@@ -25,7 +27,7 @@ class ApiAuthController extends Controller
         $token = $user->createToken('lokator-api-token')->plainTextToken;
 
         $response = [
-            'user' => $user,
+            'user' => new userResource($user),
             'api_token' => $token
         ];
 
@@ -40,11 +42,15 @@ class ApiAuthController extends Controller
             'password' => ['required', 'string', 'min:8'],
         ]);
 
-        return User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $user->roles()->attach(Role::where('name', 'Tenant')->first());
+
+        return new userResource($user);
     }
 
 
