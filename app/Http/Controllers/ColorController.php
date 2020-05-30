@@ -28,6 +28,8 @@ class ColorController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Color::class);
+
         $color = Color::create($this->validateData());
 
         return (new ColorResource($color))
@@ -57,6 +59,8 @@ class ColorController extends Controller
      */
     public function update(Request $request, Color $color)
     {
+        $this->authorize('update', $color);
+
         $color->update($this->validateData());
 
         return (new ColorResource($color))
@@ -73,6 +77,7 @@ class ColorController extends Controller
      */
     public function destroy(Color $color)
     {
+        $this->authorize('delete', $color);
         $color->delete();
 
         return response()

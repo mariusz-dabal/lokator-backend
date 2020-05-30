@@ -6,6 +6,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Http\Resources\Color as ColorResource;
+use App\Http\Resources\Avatar as AvatarResource;
 
 class User extends Authenticatable
 {
@@ -17,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'avatar_id',
+        'name', 'email', 'password', 'avatar_id', 'color_id',
     ];
 
     /**
@@ -94,9 +96,19 @@ class User extends Authenticatable
         return $this->belongsTo('App\Avatar');
     }
 
+    public function getAvatar()
+    {
+        return new AvatarResource($this->avatar()->get()->first());
+    }
+
     public function color()
     {
         return $this->belongsTo('App\Color');
+    }
+
+    public function getColor()
+    {
+        return new ColorResource($this->color()->get()->first());
     }
 
     public function flat()

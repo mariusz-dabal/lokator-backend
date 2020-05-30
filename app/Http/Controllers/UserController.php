@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Avatar;
+use App\Color;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ class UserController extends Controller
      */
     public function get()
     {
+//        dd(auth()->user()->color()->get()->first());
         return new UserResource(auth()->user());
     }
 
@@ -83,10 +85,17 @@ class UserController extends Controller
         $validatedData = $this->validateData();
 
         $avatar = Avatar::find($validatedData['avatar_id']);
+        $color = Color::find($validatedData['color_id']);
 
         if ($avatar === null) {
             return response()
                 ->json('Avatar not found')
+                ->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        if ($color === null) {
+            return response()
+                ->json('Color not found')
                 ->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -117,7 +126,7 @@ class UserController extends Controller
     private function validateData()
     {
         return request()->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'string|max:255',
             'avatar_id' => 'integer',
             'color_id' => 'integer',
         ]);

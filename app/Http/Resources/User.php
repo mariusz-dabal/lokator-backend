@@ -16,11 +16,11 @@ class User extends JsonResource
     {
         return [
             'user_id' => $this->id,
-            'flat_id' => $this->flat_id,
-            'avatar_id' => $this->avatar_id,
-            'color_id' => $this->color_id,
             'name' => $this->name,
             'email' =>$this->email,
+            'flat_id' => $this->flat_id,
+            'avatar' => $this->getAvatar(),
+            'color' => $this->getColor(),
             'roles' => $this->getRoles(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
