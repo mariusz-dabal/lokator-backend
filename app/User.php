@@ -82,6 +82,14 @@ class User extends Authenticatable
         return false;
     }
 
+    public function attachRole($role)
+    {
+        if ($this->hasRole($role)) {
+            return false;
+        }
+        $this->roles()->attach(Role::where('name', $role)->first()->id);
+    }
+
     public function getRoles()
     {
         $roles = [];

@@ -23,22 +23,25 @@ class FlatController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse|object
      */
     public function store(Request $request)
     {
         $user = $request->user();
 
         if ($user->flat()->count() > 0) {
-            return response('This user has assigned flat', Response::HTTP_FORBIDDEN);
+            return response()->json('This user has assigned flat', Response::HTTP_FORBIDDEN);
         }
 
         $flat = Flat::create($this->validateData($request));
 
-        $user->flat_id = $flat->id;
-        $user->save();
+        $flat->users()->save($user);
 
-        return response($flat, Response::HTTP_CREATED);
+        $user->attachRole('Flat Administrator');
+
+        return (new FlatResource($flat))
+            ->response()
+            ->setStatusCode( Response::HTTP_CREATED);
     }
 
     /**

@@ -11,6 +11,13 @@ class FlatPolicy
 {
     use HandlesAuthorization;
 
+    public function before($user, $ability)
+    {
+        if ($user->hasAnyRole('Admin')) {
+            return true;
+        }
+    }
+
     /**
      * Determine whether the user can view any models.
      *
