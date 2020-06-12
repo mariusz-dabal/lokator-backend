@@ -4,14 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Avatar;
 use App\Color;
+use App\Notifications\UserInviteNotification;
 use App\Role;
 use App\User;
+use App\UserInvitation;
 use Illuminate\Http\Request;
 use App\Http\Resources\User as UserResource;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('registrationView', 'process_invites');
+    }
+
     /**
      * Display authorised user.
      *
@@ -130,5 +141,44 @@ class UserController extends Controller
             'avatar_id' => 'integer',
             'color_id' => 'integer',
         ]);
+    }
+
+    public function registrationView()
+    {
+        return view('auth.register');
+    }
+
+    public function process_invites(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users,email'
+        ]);
+
+        $validator->after(function ($validator) use ($request) {
+            if (UserInvitation::where('email', $request->input('email'))->exists()) {
+                $validator->errors()->add('email', 'There exists an invite with this email!');
+            }
+        });
+
+        if ($validator->fails()) {
+            return response('fail');
+        }
+
+        do {
+            $token = Str::random(20);
+        } while (UserInvitation::where('token', $token)->first());
+
+        UserInvitation::create([
+            'token' => $token,
+            'email' => $request->input('email')
+        ]);
+
+        $url = URL::temporarySignedRoute(
+            'registration', now()->addMinutes(300), ['token' => $token]
+        );
+
+        Notification::route('mail', $request->input('email'))->notify(new UserInviteNotification($url));
+
+        return response('The Invite has been sent successfully');
     }
 }

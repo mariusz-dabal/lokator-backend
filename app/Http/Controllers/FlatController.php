@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Flat;
+use App\FlatInvitation;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\Flat as FlatResource;
@@ -84,6 +85,11 @@ class FlatController extends Controller
     {
         $flat->delete();
         return response('Flat  deleted successfully', Response::HTTP_NO_CONTENT);
+    }
+
+    public function inviteUser(Request $request)
+    {
+
     }
 
     private function validateData(Request $request)

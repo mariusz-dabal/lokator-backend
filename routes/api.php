@@ -61,6 +61,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 });
 
-
+Route::post('/users/invite', 'UserController@process_invites');
+Route::get('/registration/{token}', 'UserController@registrationView')->name('registration');
 
 
