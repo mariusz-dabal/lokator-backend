@@ -19,7 +19,7 @@ class User extends JsonResource
             'name' => $this->name,
             'email' =>$this->email,
             'flat_id' => $this->flat_id,
-            'avatar' => $this->getAvatar(),
+            'avatar_url' => $this->getAvatarUrl(),
             'color' => $this->getColor(),
             'roles' => $this->getRoles(),
             'created_at' => $this->created_at,

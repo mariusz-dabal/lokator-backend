@@ -24,7 +24,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     //roles
     Route::post('/admin/users/{user}/roles', 'UserController@assignRole');
-    Route::post('/admin/users/{user}/roles', 'UserController@detachRole');
+//    Route::post('/admin/users/{user}/roles', 'UserController@detachRole');
 
     //users
     Route::get('/user', 'UserController@get');

@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\User as UserResource;
+use Symfony\Component\HttpFoundation\Response;
 
 class ApiAuthController extends Controller
 {
@@ -27,11 +28,10 @@ class ApiAuthController extends Controller
         $token = $user->createToken('lokator-api-token')->plainTextToken;
 
         $response = [
-            'user' => new userResource($user),
             'api_token' => $token
         ];
 
-        return response($response, 201);
+        return response()->json($response, Response::HTTP_CREATED);
     }
 
     public function register(Request $request)

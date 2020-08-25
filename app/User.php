@@ -104,9 +104,9 @@ class User extends Authenticatable
         return $this->belongsTo('App\Avatar');
     }
 
-    public function getAvatar()
+    public function getAvatarUrl()
     {
-        return new AvatarResource($this->avatar()->get()->first());
+        return $this->avatar()->get()->first()->url();
     }
 
     public function color()
